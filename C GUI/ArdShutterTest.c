@@ -208,7 +208,7 @@ int CVICALLBACK param (int panel, int control, int event,
 			switch(control) {
 				case MAIN_PAN_GETPARAM_BUT:
 					if((_status = ARD_ShutterGetParameters(shutter, &PWMChannel, &digInput, &openPos, &closedPos, &delay, label))) return 0;
-					SetCtrlVal(panel, MAIN_PAN_PWMCH_NUM, PWMChannel);
+					SetCtrlVal(panel, MAIN_PAN_SHIELDCH_NUM, PWMChannel);
 					SetCtrlVal(panel, MAIN_PAN_DIGIN_NUM, digInput);
 					SetCtrlVal(panel, MAIN_PAN_OPENPOS_NUM, openPos);
 					SetCtrlVal(panel, MAIN_PAN_CLOSEDPOS_NUM, closedPos);
@@ -216,7 +216,7 @@ int CVICALLBACK param (int panel, int control, int event,
 					SetCtrlVal(panel, MAIN_PAN_LABEL_STR, label);
 					break;
 				case MAIN_PAN_SETPARAM_BUT:
-					GetCtrlVal(panel, MAIN_PAN_PWMCH_NUM, &PWMChannel);
+					GetCtrlVal(panel, MAIN_PAN_SHIELDCH_NUM, &PWMChannel);
 					GetCtrlVal(panel, MAIN_PAN_DIGIN_NUM, &digInput);
 					GetCtrlVal(panel, MAIN_PAN_OPENPOS_NUM, &openPos);
 					GetCtrlVal(panel, MAIN_PAN_CLOSEDPOS_NUM, &closedPos);

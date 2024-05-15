@@ -2,7 +2,7 @@
 #define PARAMETERS_H
 
 struct ShutterStruct {
-  uint8_t PWMChannel;
+  uint8_t shieldChannel;
   int8_t digInput;
   uint16_t posClosed;
   uint16_t posOpen;
@@ -21,7 +21,7 @@ class Parameters
   // set the shutter parameters for the indicated shutter
   //    shutter: pass -1 to create new shutter
   //    label: anything longer than MAXLABELCHARS will be cut off
-  int8_t set(int8_t shutter, uint8_t PWMChannel, int8_t digInput, uint16_t openPos, uint16_t closePos,
+  int8_t set(int8_t shutter, uint8_t shieldChannel, int8_t digInput, uint16_t openPos, uint16_t closePos,
                uint16_t transitDelay_ms, const char* label);
 
   // clear the shutter info
@@ -35,7 +35,7 @@ class Parameters
   int8_t numShutters(void);
 
   // Return various parameters for the indicated shutter
-  uint8_t PWMChannel(int8_t shutter);
+  uint8_t shieldChannel(int8_t shutter);
   int8_t digInput(int8_t shutter);
   uint16_t posOpen(int8_t shutter);
   uint16_t posClosed(int8_t shutter);

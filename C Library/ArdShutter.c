@@ -387,11 +387,11 @@ fail:
 	
 
 ////////////////////////////////////////////////////////
-// Set shutter posit_ion
+// Set shutter position
 //   device: the shutter attached to the Arduino
-//   posit_ion: PWM value
+//   position: actuator position
 ////////////////////////////////////////////////////////
-int ARD_ShutterSetPosition(int device, int PWMVal)
+int ARD_ShutterSetPosition(int device, int pos)
 {
 	int isLocked=0;
 
@@ -407,13 +407,13 @@ int ARD_ShutterSetPosition(int device, int PWMVal)
 	}
 	isLocked=1;
 
-	// set the shutter posit_ion
-	if (PWMVal <0) {
-		reportError (__LINE__-2, __func__, "Invalid posit_ion.");
+	// set the shutter position
+	if (pos <0) {
+		reportError (__LINE__-2, __func__, "Invalid position.");
 		goto fail;
 	}
-	if (setDeviceParameterInt(_io, "SP", device, PWMVal)) {
-		reportError (__LINE__-1, __func__, "Could not set shutter posit_ion.");
+	if (setDeviceParameterInt(_io, "SP", device, pos)) {
+		reportError (__LINE__-1, __func__, "Could not set shutter position.");
 		goto fail;
 	}
 
@@ -434,13 +434,13 @@ fail:
 ////////////////////////////////////////////////////////
 // Get shutter parameters
 //   device: the shutter attached to the Arduino
-//   PWMChannel: chanel on the PWM servo board
+//   shieldChannel: actuator chanel on the shield
 //   digIn: the number of the digital input (-1 for none)
-//   open/closedPos: PWM value for the respective posit_ions
+//   open/closedPos: actuator value for the respective positions
 //   transitDelay_ms: time for the shutter to open/close in ms
 //   label: label to display
 ////////////////////////////////////////////////////////
-int ARD_ShutterGetParameters(int device, int *PWMChannel, int *digIn, int *openPos, int *closedPos, int *transitDelay_ms, char* label)
+int ARD_ShutterGetParameters(int device, int *shieldChannel, int *digIn, int *openPos, int *closedPos, int *transitDelay_ms, char* label)
 {
 	unsigned char instrResp[256];
 	ViUInt32 charsRead;
@@ -479,7 +479,7 @@ _status = viPrintf(_io, "GPR%d\n", device);
 		reportARDError (__LINE__-2, __func__, (char *)instrResp);
 		goto fail;
 	}
-	if ( sscanf ((char *)instrResp, "PR%d,%d,%d,%d,%d,%d,%s", &respDev, PWMChannel, digIn, openPos, closedPos, transitDelay_ms, label) != 7) {
+	if ( sscanf ((char *)instrResp, "PR%d,%d,%d,%d,%d,%d,%s", &respDev, shieldChannel, digIn, openPos, closedPos, transitDelay_ms, label) != 7) {
 		reportError (__LINE__-1, __func__, "Could not read shutter return string.");
 		goto fail;
 	}
@@ -505,13 +505,13 @@ fail:
 ////////////////////////////////////////////////////////
 // Set shutter parameters
 //   device: the shutter attached to the Arduino
-//   PWMChannel: chanel on the PWM servo board
+//   shieldChannel: chanel on the shield
 //   digIn: the number of the digital input (-1 for none)
-//   open/closedPos: PWM value for the respective posit_ions
+//   open/closedPos: actuator value for the respective positions
 //   transitDelay_ms: time for the shutter to open/close in ms
 //   label: label to display
 ////////////////////////////////////////////////////////
-int ARD_ShutterSetParameters(int device, int PWMChannel, int digInput, int openPos, int closedPos, int transitDelay_ms, const char* label)
+int ARD_ShutterSetParameters(int device, int shieldChannel, int digInput, int openPos, int closedPos, int transitDelay_ms, const char* label)
 {
 	int isLocked=0;
 
@@ -527,7 +527,7 @@ int ARD_ShutterSetParameters(int device, int PWMChannel, int digInput, int openP
 	}
 	isLocked=1;
 
-	_status = viPrintf(_io, "SPR%d,%d,%d,%d,%d,%d,%s\n", device, PWMChannel, digInput, openPos, closedPos, transitDelay_ms, label);
+	_status = viPrintf(_io, "SPR%d,%d,%d,%d,%d,%d,%s\n", device, shieldChannel, digInput, openPos, closedPos, transitDelay_ms, label);
 	if(_status) {
 		reportVisaError (__LINE__-2, __func__, _io, _status);
 		goto fail;

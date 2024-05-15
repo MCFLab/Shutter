@@ -64,7 +64,7 @@ class Panel:
         self.state_check_button = ttk.Button(stateFrame, text='Check')
 
         paramFrame = ttk.Frame(window)
-        self.param_pwm_channel =  NumCtrl(paramFrame, 'PWM Channel', 0, 15, 1)
+        self.param_shield_channel =  NumCtrl(paramFrame, 'Shield Channel', 0, 15, 1)
         self.param_dig_input =  NumCtrl(paramFrame, 'DigInput', -1, 3, 1)
         self.param_open_pos =  NumCtrl(paramFrame, 'Open Pos', 200, 1000, 10)
         self.param_closed_pos =  NumCtrl(paramFrame, 'Closed Pos', 200, 1000, 10)
@@ -88,7 +88,7 @@ class Panel:
         self.state_manual_button.pack(side='left', anchor='s', padx=10)
         self.state_check_button.pack(side='left', anchor='s', padx=(30,10))
 
-        self.param_pwm_channel.pack(side='left', anchor='s', padx=10)
+        self.param_shield_channel.pack(side='left', anchor='s', padx=10)
         self.param_dig_input.pack(side='left', anchor='s', padx=10)
         self.param_open_pos.pack(side='left', anchor='s', padx=10)
         self.param_closed_pos.pack(side='left', anchor='s', padx=10)
@@ -156,7 +156,7 @@ class Panel:
 
 
     def set_panel_params(self, params):
-        self.param_pwm_channel.numInt.set(params['PWMChannel'])
+        self.param_shield_channel.numInt.set(params['shieldChannel'])
         self.param_dig_input.numInt.set(params['digInput'])
         self.param_open_pos.numInt.set(params['openPos'])
         self.param_closed_pos.numInt.set(params['closedPos'])
@@ -166,7 +166,7 @@ class Panel:
 
     def get_panel_params(self):
         params = {}
-        params['PWMChannel'] = self.param_pwm_channel.numInt.get()
+        params['shieldChannel'] = self.param_shield_channel.numInt.get()
         params['digInput'] = self.param_dig_input.numInt.get()
         params['openPos'] = self.param_open_pos.numInt.get()
         params['closedPos'] = self.param_closed_pos.numInt.get()

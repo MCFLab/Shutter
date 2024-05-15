@@ -27,7 +27,7 @@
 #define  MAIN_PAN_TRANSDELAY_NUM          12      /* control type: numeric, callback function: (none) */
 #define  MAIN_PAN_CLOSEDPOS_NUM           13      /* control type: numeric, callback function: (none) */
 #define  MAIN_PAN_OPENPOS_NUM             14      /* control type: numeric, callback function: (none) */
-#define  MAIN_PAN_PWMCH_NUM               15      /* control type: numeric, callback function: (none) */
+#define  MAIN_PAN_SHIELDCH_NUM            15      /* control type: numeric, callback function: (none) */
 #define  MAIN_PAN_MANUAL_NUM              16      /* control type: numeric, callback function: setManual */
 #define  MAIN_PAN_NUMDEVICES_NUM          17      /* control type: numeric, callback function: (none) */
 #define  MAIN_PAN_DIGIN_NUM               18      /* control type: numeric, callback function: (none) */

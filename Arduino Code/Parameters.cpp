@@ -12,7 +12,7 @@ Parameters::Parameters() : numShuttersDefined(0) {}
 ////////////////////////////
 // Set the shutter parameters
 // if shutter=-1, add a new shutter
-int8_t Parameters::set(int8_t shutter, uint8_t PWMChannel, int8_t digInput, uint16_t posOpen, uint16_t posClosed,
+int8_t Parameters::set(int8_t shutter, uint8_t shieldChannel, int8_t digInput, uint16_t posOpen, uint16_t posClosed,
                                  uint16_t transitDelay_ms, const char* label)
 {
   int8_t selectedShutter;
@@ -31,7 +31,7 @@ int8_t Parameters::set(int8_t shutter, uint8_t PWMChannel, int8_t digInput, uint
     selectedShutter=shutter;
   }
 
-  params[selectedShutter].PWMChannel      = PWMChannel;
+  params[selectedShutter].shieldChannel      = shieldChannel;
   params[selectedShutter].digInput    = digInput;
   params[selectedShutter].posOpen         = posOpen;
   params[selectedShutter].posClosed       = posClosed;
@@ -90,9 +90,9 @@ int8_t Parameters::numShutters(void)
 {
   return numShuttersDefined;
 }
-uint8_t Parameters::PWMChannel(int8_t shutter)
+uint8_t Parameters::shieldChannel(int8_t shutter)
 {
-  return params[shutter].PWMChannel;
+  return params[shutter].shieldChannel;
 }
 int8_t Parameters::digInput(int8_t shutter)
 {

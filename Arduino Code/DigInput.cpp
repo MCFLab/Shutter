@@ -54,11 +54,13 @@ DigInput::Begin()
   PCICR |= bit(PCIE2);  // enable PCI on port 2 (port D, PCINT16 - PCINT23)
   PCMSK2 |= PCINT_MASK; // marks the pins to monitor
   // set up the timer1 interrupt
-  TCCR1A = TCCR1B = 0;  // clear register
-  TCNT1 = 0; // initialize counter value to 0
-  TCCR1B |= bit(CS12) | bit(CS10); // set CS12 and CS10 bits for 1024 prescaler 
-  OCR1A = (uint16_t)(CHECK_INTERVAL_MS*15.625 - 1); // set compare match register (must be <65536)
-  TCCR1B |= bit(WGM12); // turn on CTC mode
+  if (DIGINPUT_CHECK_INTERVAL_MS>0) {
+    TCCR1A = TCCR1B = 0;  // clear register
+    TCNT1 = 0; // initialize counter value to 0
+    TCCR1B |= bit(CS12) | bit(CS10); // set CS12 and CS10 bits for 1024 prescaler 
+    OCR1A = (uint16_t)(DIGINPUT_CHECK_INTERVAL_MS*15.625 - 1); // set compare match register (must be <65536)
+    TCCR1B |= bit(WGM12); // turn on CTC mode
+  }
   interrupts();
 
   DigInput::status = 0;
@@ -105,21 +107,26 @@ uint8_t DigInput::CheckState(uint8_t *pinState)
 ////////////////////////////
 // pin change interrupt gets called when any of the monitored pins change
 ISR(PCINT2_vect){
-  // stop PC interrupt
-  PCICR &= ~bit(PCIE2);  // disable PCI on port 2
-  // start timer -> this runs the timer for CHECK_INTERVAL_MS ms
-  TCNT1 = 0; // reset the timer to zero
-  TIMSK1 |= bit(OCIE1A); // enable timer compare interrupt
 
-  // this ensures that the debounce check runs one full cycle
-  DigInput::state[DigInput::index] = ~(PIND & PCINT_MASK);
-  DigInput::index++;
-  if(DigInput::index>=MAX_CHECKS) DigInput::index=0;
+  if (DIGINPUT_CHECK_INTERVAL_MS>0) {
+    // stop PC interrupt
+    PCICR &= ~bit(PCIE2);  // disable PCI on port 2
+    // start timer -> this runs the timer for DIGINPUT_CHECK_INTERVAL_MS ms
+    TCNT1 = 0; // reset the timer to zero
+    TIMSK1 |= bit(OCIE1A); // enable timer compare interrupt
 
+    // this ensures that the debounce check runs one full cycle
+    DigInput::state[DigInput::index] = ~(PIND & PCINT_MASK);
+    DigInput::index++;
+    if(DigInput::index>=DIGINPUT_MAX_CHECKS) DigInput::index=0;
+  } else { // no debounce check
+    DigInput::highState = PIND & PCINT_MASK;
+    DigInput::status |= bit(PIN_SETTLED); // set the flag that the pins have finished bouncing
+  }
 }
 
 ////////////////////////////
-// timer interrupt gets called when count is met (every CHECK_INTERVAL_MS until stopped)
+// timer interrupt gets called when count is met (every DIGINPUT_CHECK_INTERVAL_MS until stopped)
 ISR(TIMER1_COMPA_vect)
 {
   uint8_t z;
@@ -129,13 +136,13 @@ ISR(TIMER1_COMPA_vect)
   DigInput::index++;
   // check if the pins have settled (all the entries match, all pins high or all low)
   high = low = 0xFF;
-  for (z=0; z<MAX_CHECKS;z++) {
+  for (z=0; z<DIGINPUT_MAX_CHECKS;z++) {
     high = high & DigInput::state[z];  // check for all bits high
     low = low & ~DigInput::state[z];  // check for all bits low
   }
   DigInput::highState = high; // bits that are 1 have settled at high, all others have changed
   DigInput::lowState = low; // bits that are 1 have settled at low, all others have changed
-  if(DigInput::index>=MAX_CHECKS) DigInput::index=0;
+  if(DigInput::index>=DIGINPUT_MAX_CHECKS) DigInput::index=0;
 
   if ( (high | low) == 0xFF ) { // all pins have settled either high or low
     // set the flag and stop the timer

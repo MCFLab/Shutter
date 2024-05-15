@@ -19,7 +19,7 @@ class Shutter:
       get(set)_state(dev): get(set) the state (open-1, close-0) of shutter # dev
       get_device_label(dev): get the label of shutter # dev
       get_transit_delay(dev): get the transit delay in ms of shutter # dev
-      set_position(dev): set the PWM position of shutter # dev
+      set_position(dev): set the actuator position of shutter # dev
       get(set)_parameters(dev): get(set) the device parms of shutter # dev
       save: saves parameters to EEPROM
       clear: clears the device paramters and sets the num sutters to zero
@@ -129,7 +129,7 @@ class Shutter:
             logging.error(f"Wrong response. Expected 6 parameters, got {len(numbers)}.")
             return {}
         return_dict = {}
-        return_dict['PWMChannel'] = int(numbers[1])
+        return_dict['shieldChannel'] = int(numbers[1])
         return_dict['digInput'] = int(numbers[2])
         return_dict['openPos'] = int(numbers[3])
         return_dict['closedPos'] = int(numbers[4])
@@ -147,7 +147,7 @@ class Shutter:
         """
         logging.info('Setting device parameters.')
         resp = self._inst.query(f'SPR{device},'\
-                                +f'{params['PWMChannel']},'\
+                                +f'{params['shieldChannel']},'\
                                 +f'{params['digInput']},'\
                                 +f'{params['openPos']},'\
                                 +f'{params['closedPos']},'\
@@ -172,14 +172,14 @@ class Shutter:
 
 
     def set_position(self, device, position):
-        """ Sets the position of the servo for a given device
+        """ Sets the position of the actuator for a given device
 
-        Sets the position of the RC servo manually (can be different from the open/close poes).
+        Sets the position of the actuator manually (can be different from the open/close poes).
         Arguments:
           device: the selected shutter number (zero-based index)
-          position: PWM value for the RC servo
+          position: position for the actuator
         """
-        logging.info('Setting servo position.')
+        logging.info('Setting actuator position.')
         resp = self._inst.query(f'SSP{device},{position}').rstrip('\r\n')
         if resp!='OK':
             logging.error(f"Invalid response. Expected 'OK', got '{resp}'.")

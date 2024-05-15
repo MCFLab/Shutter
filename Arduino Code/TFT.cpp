@@ -31,8 +31,6 @@
 #define YELLOW   0xFFE0 
 #define WHITE    0xFFFF
 
-#define SCREENROTATION  1 // (1: USB conn on left; 3: USB conn on right)
-
 
 // *************************************************************************************
 // global variables
@@ -73,7 +71,7 @@ TFT::Begin()
 #endif      
 
   _tftDev.begin();
-  _tftDev.setRotation(SCREENROTATION);
+  _tftDev.setRotation(TFT_SCREENROTATION);
   _tftDev.fillScreen(ILI9341_BLACK);
 
   if (!_ts.begin(40)) { // set sensitivity coefficient
@@ -191,15 +189,15 @@ TFT::GetTouchCoordinates(uint16_t *x, uint16_t *y)
   TS_Point p = _ts.getPoint();
   // rotate coordinates
   int16_t height = _tftDev.height();
-#if SCREENROTATION == 1
+#if TFT_SCREENROTATION == 1
   int16_t width = _tftDev.width();
   *x = width - p.y;
   *y =  p.x;
-#elif SCREENROTATION == 3
+#elif TFT_SCREENROTATION == 3
   *x = p.y;
   *y = height - p.x;
 #else
-  #error Invalid SCREENROTATION value (only 1 or 3 allowed)
+  #error Invalid TFT_SCREENROTATION value (only 1 or 3 allowed)
 #endif
 }
 

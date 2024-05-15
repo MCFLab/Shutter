@@ -46,8 +46,9 @@ int ARD_ShutterSetPosition(int device, int PWMVal);
 
 // Get shutter parameters
 //   device: the shutter attached to the Arduino
-//   PWMChannel: chanel on the PWM servo board
-//   open/closedPos: PWM value for the respective positions
+//   shieldChannel: actuator chanel on the shield
+//   digIn: the number of the digital input (-1 for none)
+//   open/closedPos: actuator value for the respective positions
 //   transitDelay_ms: time for the shutter to open/close in ms
 //   label: label to display
 int ARD_ShutterGetParameters(int device, int *PWMChannel, int *digInput, int *openPos,
@@ -55,8 +56,9 @@ int ARD_ShutterGetParameters(int device, int *PWMChannel, int *digInput, int *op
 
 // Set shutter parameters
 //   device: the shutter attached to the Arduino
-//   PWMChannel: chanel on the PWM servo board
-//   open/closedPos: PWM value for the respective positions
+//   shieldChannel: chanel on the shield
+//   digIn: the number of the digital input (-1 for none)
+//   open/closedPos: actuator value for the respective positions
 //   transitDelay_ms: time for the shutter to open/close in ms
 //   label: label to display
 int ARD_ShutterSetParameters(int device, int PWMChannel, int digInput, int openPos,

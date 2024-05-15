@@ -49,7 +49,7 @@ SerialComm::CheckAction(SerialActionType *action, int8_t *device, int8_t *state,
   int8_t status;
   char label[MAXLABELCHARS+1];
   int8_t shutter;
-  uint8_t PWMChannel;
+  uint8_t shieldChannel;
   int8_t digInput;
   uint16_t openPos, closePos, tempPos, transitDelay;
 
@@ -177,7 +177,7 @@ SerialComm::CheckAction(SerialActionType *action, int8_t *device, int8_t *state,
         return;
       }
       Serial.print("PR");Serial.print(tempDev);Serial.print(",");
-      Serial.print(params->PWMChannel(tempDev));Serial.print(",");
+      Serial.print(params->shieldChannel(tempDev));Serial.print(",");
       Serial.print(params->digInput(tempDev));Serial.print(",");
       Serial.print(params->posOpen(tempDev));Serial.print(",");
       Serial.print(params->posClosed(tempDev));Serial.print(",");
@@ -191,20 +191,20 @@ SerialComm::CheckAction(SerialActionType *action, int8_t *device, int8_t *state,
     // check for parameter set
     if (strncmp(serialData, "SPR", 3)  == 0){
       if (sscanf(serialData, "SPR%hhd,%hhu,%hhd,%u,%u,%u,%"MAXLABELCHARS_STR"s",
-                   &shutter, &PWMChannel, &digInput, &openPos, &closePos, &transitDelay, label)!=7) {
+                   &shutter, &shieldChannel, &digInput, &openPos, &closePos, &transitDelay, label)!=7) {
         Serial.println(F("Error: Invalid SPR command format."));
         return;
       }
 #if SERIAL_DEBUG>0
       Serial.print(F("shutter="));Serial.print(shutter);
-      Serial.print(F(" PWMChannel="));Serial.print(PWMChannel);
+      Serial.print(F(" shieldChannel="));Serial.print(shieldChannel);
       Serial.print(F(" digInput="));Serial.print(digInput);
       Serial.print(F(" openPos="));Serial.print(openPos);
       Serial.print(F(" closePos="));Serial.print(closePos);
       Serial.print(F(" transitDelay="));Serial.print(transitDelay);
       Serial.print(F(" label="));Serial.println(label);
 #endif      
-      status = params->set(shutter, PWMChannel, digInput, openPos, closePos, transitDelay, label);
+      status = params->set(shutter, shieldChannel, digInput, openPos, closePos, transitDelay, label);
       if (status==0) {
         Serial.println("OK");
       *action = ParamChange;
