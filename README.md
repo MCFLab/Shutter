@@ -4,6 +4,10 @@ The **Shutter Project** is an open-source development of a low-cost, general pur
 
 *Reference:*  Mathias S. Fischer and Martin C. Fischer. Cost-effective, open-source light shutters with Arduino control. [HardwareX 19, e00548 (2024)](https://doi.org/10.1016/j.ohx.2024.e00548)
 
+
+## Rotary Solenoids
+Since publication of the HardwareX paper, we have also tested the controller with rotary solenoids, which perform quite a bit better then servos. We added a document in the Docs folder describing the operation with rotary solenoids in a bit more detail. Also, for questions and discussion refer to the [this topic](https://forum.microlist.org/t/cost-effective-open-source-light-shutters-with-arduino-control/) in the [Builders/Tools Category](https://forum.microlist.org/c/builders-tools/21) of the [µForum](https://forum.microlist.org/).
+
 ## Contributing
 I welcome your contributions with [pull-requests](https://github.com/MCFLab/Shutter/pulls) and [issues suggesting further improvement](https://github.com/MCFLab/Shutter/issues)!
 
